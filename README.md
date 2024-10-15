@@ -37,9 +37,9 @@ These results, including figures, will be produced in a new folder,
 
 ## Screenshots
 
-![Asymptotic Normality](/illustrative_figures/sim_comps.pdf)
+![Asymptotic Normality](/illustrative-figures/sim_comps.pdf)
 
-![AART Application](/illustrative_figures/aart_comp.pdf)
+![AART Application](/illustrative-figures/aart_comp.pdf)
 
 ## Lead, Corresponding Author
 
