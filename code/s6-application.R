@@ -4,18 +4,24 @@
 ################################################################################
 ################################################################################
 
+require('lubridate')
+require('ggplot2')
+require('extrafont') #may need to load fonts
+require('cowplot')
 
+#please run sequentially downwards
+#includes all application details from Section 6
 
-
+dir.create("./results/") #to store results
 
 
 ################################################################################
 #LEFT-TRUNCATION
 ################################################################################
 
-require('lubridate')
-require('ggplot2')
-require('extrafont') #may need to load fonts
+#require('lubridate')
+#require('ggplot2')
+#require('extrafont') #may need to load fonts
 
 rm(list=ls())
 
@@ -766,9 +772,9 @@ write.csv(df, "./results/df1925.csv")
 #RIGHT-CENSORING
 ################################################################################
 
-require('lubridate')
-require('ggplot2')
-require('extrafont') #may need to load fonts
+# require('lubridate')
+# require('ggplot2')
+# require('extrafont') #may need to load fonts
 
 rm(list=ls())
 
@@ -1644,9 +1650,9 @@ p +
 ################################################################################
 # construct the figure
 ################################################################################
-require('cowplot')
-require('ggplot2')
-require('extrafont')
+# require('cowplot')
+# require('ggplot2')
+# require('extrafont')
 
 rm(list=ls())
 

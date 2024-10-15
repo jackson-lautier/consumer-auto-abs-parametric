@@ -4,20 +4,25 @@
 ################################################################################
 ################################################################################
 
+require('ggplot2')
+require('extrafont') #may need to load fonts
+require('latex2exp')
+require('microbenchmark') #used for timing purposes
 
+#please run sequentially downwards
+#includes all numeric, simulations studies from section 5
 
-
-
+dir.create("./results/") #to store results
 
 
 ################################################################################
 #LEFT-TRUNCATION (S3) & PL Geometric
 ################################################################################
 
-require('ggplot2')
-require('extrafont') #may need to load fonts
-require(latex2exp)
-require(microbenchmark) #used for timing purposes
+#require('ggplot2')
+#require('extrafont') #may need to load fonts
+#require(latex2exp)
+#require(microbenchmark) #used for timing purposes
 
 rm(list=ls())
 #problem set-up
@@ -102,10 +107,10 @@ microbenchmark(constrOptim(init, log_like_fn, NULL, ui=ui, ci=ci),
 #LEFT-TRUNCATION & RIGHT-CENSORING (S4) & PL Geometric
 ################################################################################
 
-require('ggplot2')
-require('extrafont') #may need to load fonts
-require(latex2exp)
-require(microbenchmark) #used for timing purposes
+#require('ggplot2')
+#require('extrafont') #may need to load fonts
+#require(latex2exp)
+#require(microbenchmark) #used for timing purposes
 
 rm(list=ls())
 #problem set-up
@@ -198,10 +203,10 @@ microbenchmark(constrOptim(init, log_like_fn, NULL, ui=ui, ci=ci),
 #LEFT-TRUNCATION (S3) & Shifted-Binomial
 ################################################################################
 
-require('ggplot2')
-require('extrafont') #may need to load fonts
-require(latex2exp)
-require(microbenchmark) #used for timing purposes
+# require('ggplot2')
+# require('extrafont') #may need to load fonts
+# require(latex2exp)
+# require(microbenchmark) #used for timing purposes
 
 rm(list=ls())
 #problem set-up
@@ -287,10 +292,10 @@ microbenchmark(constrOptim(init, log_like_fn, NULL, ui=ui, ci=ci),
 #LEFT-TRUNCATION & RIGHT-CENSORING (S4) & Shifted-Binomial
 ################################################################################
 
-require('ggplot2')
-require('extrafont') #may need to load fonts
-require(latex2exp)
-require(microbenchmark) #used for timing purposes
+# require('ggplot2')
+# require('extrafont') #may need to load fonts
+# require(latex2exp)
+# require(microbenchmark) #used for timing purposes
 
 rm(list=ls())
 #problem set-up
@@ -380,21 +385,6 @@ microbenchmark(constrOptim(init, log_like_fn, NULL, ui=ui, ci=ci),
                unit = "microseconds")
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ################################################################################
 ################################################################################
 # Figure 1: Asymptotic Normality Verification
@@ -402,20 +392,14 @@ microbenchmark(constrOptim(init, log_like_fn, NULL, ui=ui, ci=ci),
 ################################################################################
 
 
-
-
-
-dir.create("./results/")
-
-
 ################################################################################
 #LEFT-TRUNCATION (S3) & PL Geometric
 ################################################################################
 
-require('ggplot2')
-require('extrafont') #may need to load fonts
-require(latex2exp)
-require(microbenchmark) #used for timing purposes
+# require('ggplot2')
+# require('extrafont') #may need to load fonts
+# require(latex2exp)
+# require(microbenchmark) #used for timing purposes
 
 rm(list=ls())
 #problem set-up
@@ -524,10 +508,10 @@ write.csv(facet_data, "./results/fd_lt_rt_geom.csv")
 #LEFT-TRUNCATION & RIGHT-CENSORING (S4) & PL Geometric
 ################################################################################
 
-require('ggplot2')
-require('extrafont') #may need to load fonts
-require(latex2exp)
-require(microbenchmark) #used for timing purposes
+# require('ggplot2')
+# require('extrafont') #may need to load fonts
+# require(latex2exp)
+# require(microbenchmark) #used for timing purposes
 
 rm(list=ls())
 #problem set-up
@@ -663,10 +647,10 @@ write.csv(facet_data, "./results/fd_rc_rt_geom.csv")
 #LEFT-TRUNCATION (S3) & Shifted-Binomial
 ################################################################################
 
-require('ggplot2')
-require('extrafont') #may need to load fonts
-require(latex2exp)
-require(microbenchmark) #used for timing purposes
+# require('ggplot2')
+# require('extrafont') #may need to load fonts
+# require(latex2exp)
+# require(microbenchmark) #used for timing purposes
 
 rm(list=ls())
 #problem set-up
@@ -776,10 +760,10 @@ write.csv(facet_data, "./results/fd_lt_binom.csv")
 #LEFT-TRUNCATION & RIGHT-CENSORING (S4) & Shifted-Binomial
 ################################################################################
 
-require('ggplot2')
-require('extrafont') #may need to load fonts
-require(latex2exp)
-require(microbenchmark) #used for timing purposes
+# require('ggplot2')
+# require('extrafont') #may need to load fonts
+# require(latex2exp)
+# require(microbenchmark) #used for timing purposes
 
 rm(list=ls())
 #problem set-up
@@ -916,8 +900,8 @@ write.csv(facet_data, "./results/fd_rc_binom.csv")
 
 rm(list=ls())
 
-library('ggplot2')
-require('extrafont')
+# library('ggplot2')
+# require('extrafont')
 
 df1 = read.csv('./results/fd_lt_binom.csv')
 df1 = df1[,-1]
@@ -954,17 +938,6 @@ ggplot() +
 ggsave("./results/sim_comps.pdf",height=4,width=6,device = cairo_pdf)
 
 
-
-
-
-
-
-
-
-
-
-
-
 ################################################################################
 ################################################################################
 # Table 2: Robustness Simulation Study
@@ -973,22 +946,14 @@ ggsave("./results/sim_comps.pdf",height=4,width=6,device = cairo_pdf)
 
 
 
-
-
-
-
-
-
-
-
 ################################################################################
 #NO CENSORING
 ################################################################################
 
-require('ggplot2')
-require('extrafont') #may need to load fonts
-require(latex2exp)
-require(microbenchmark) #used for timing purposes
+# require('ggplot2')
+# require('extrafont') #may need to load fonts
+# require(latex2exp)
+# require(microbenchmark) #used for timing purposes
 
 rm(list=ls())
 #problem set-up
@@ -1119,10 +1084,10 @@ for(n in samp_sizes){
 #CENSORING
 ################################################################################
 
-require('ggplot2')
-require('extrafont') #may need to load fonts
-require(latex2exp)
-require(microbenchmark) #used for timing purposes
+# require('ggplot2')
+# require('extrafont') #may need to load fonts
+# require(latex2exp)
+# require(microbenchmark) #used for timing purposes
 
 rm(list=ls())
 #problem set-up
@@ -1270,17 +1235,6 @@ for(e in cens_time){
     
   }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
