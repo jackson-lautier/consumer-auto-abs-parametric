@@ -5,7 +5,7 @@
 ## Introduction
 
 This repository is intended as an online supplement to the manuscript,
-_A discrete-time, semi-parametric time-to-event model for
+_Estimating the time-to-event distribution for
 loan-level data within an asset-backed security_.
 Please attribute any citations of this repository to the original
 manuscript.
