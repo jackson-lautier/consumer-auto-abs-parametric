@@ -6,7 +6,7 @@
 
 This repository is intended as an online supplement to the manuscript,
 _Estimating the time-to-event distribution for
-loan-level data within an asset-backed security_.
+loan-level data within a consumer auto loan asset-backed security_.
 Please attribute any citations of this repository to the original
 manuscript.
 

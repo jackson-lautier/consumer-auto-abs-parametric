@@ -33,6 +33,8 @@ len_obs_window = 43 #num. mnths in obs. window
 path = "./data/"
 aart <- read.csv(paste(path,'aart173_compiledr.csv',sep=""))
 
+summary(aart$reportingPeriodBeginningLoanBalanceAmount)
+
 date <- paste(aart$originationDate,"-01",sep="")
 date <- as.Date(date, "%m/%Y-%d")
 min(date); max(date)
