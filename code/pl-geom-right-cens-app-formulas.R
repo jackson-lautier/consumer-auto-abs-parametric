@@ -149,20 +149,20 @@ dS_dp = function(u, THETA){
 }
 
 d2S_dp2 = function(u, THETA){
-
+  
   p = THETA[1]
-
+  
   if( ((Delta + 1) <= u) & (u <= (omega)) ){
-
+    
     return(
       (u - Delta - 2) * (u - Delta - 1) * ((1 - p)^(u - Delta - 3))
     )
-
+    
   }
   else{
     return(0)
   }
-
+  
 }
 
 
@@ -211,69 +211,6 @@ d2a_dpdgv = function(v, THETA){
   
 }
 
-u = c( (Delta + 1) : omega)
-reps = length(c( (Delta + 1) : (Delta + m)))
-
-x_col = c()
-y_col = c()
-for(u in c( (Delta + 1) : omega)){
-
-  for(v in c( (Delta + 1) : (Delta + m))){
-    if(v <= u){
-      x_col = append(x_col, u)
-      y_col = append(y_col, v)
-    }
-  }
-
-}
-
-h_prob = c()
-for(i in c(1:length(x_col))){
-  h_prob = append(h_prob, h_star(x_col[i], y_col[i], THETA))
-}
-
-h_sum = c()
-for(i in c(1:length(x_col))){
-  h_sum = append(h_sum, sum(h_prob[1:i]))
-}
-
-l_bound = c(0, h_sum[1:((length(h_prob)-1))])
-u_bound = h_sum
-
-h_inv = data.frame("X" = x_col,
-                   "Y" = y_col,
-                   "l_bound" = l_bound,
-                   "u_bound" = u_bound)
-
-h_sim = function(unif){
-
-  X_i = h_inv$X[(h_inv$l_bound <= unif) & (h_inv$u_bound >= unif)]
-  Y_i = h_inv$Y[(h_inv$l_bound <= unif) & (h_inv$u_bound >= unif)]
-
-  return(c(X_i, Y_i))
-
-}
-
-#likelihood function equation (4)
-# log_like_fn = function(THETA){
-#   
-#   alp = alpha(THETA)
-#   
-#   n = nrow(obs_data)
-#   
-#   Li = c()
-#   for(k in c((Delta + 1):(Delta + m))){
-#     for(j in c(k:(omega))){
-#       cnt = sum(( (obs_data$Yi == k ) & (obs_data$Xi == j) ))
-#       val = ( f_X(j, THETA) * g_Y(k, THETA) ) / alpha(THETA)
-#       Li = append(Li, log( val^cnt ) )
-#     }
-#   }
-#   
-#   return( -sum(Li) )
-#   
-# }
-
 log_like_fn = function(THETA){
   
   alp = alpha(THETA)
@@ -296,81 +233,6 @@ log_like_fn = function(THETA){
   
   val = -n * log(alp) + sum(Li)
   return( -val )
-  
-}
-
-# h_dot_v = function(v){
-#   
-#   n = nrow(obs_data)
-#   val = c()
-#   for(u in c(v:omega)){
-#     cur = sum( (obs_data$Yi == v) & (obs_data$Xi == u) )
-#     val = append(val, cur/n)
-#   }
-#   
-#   return(sum(val))
-# }
-# 
-# h_u_dot = function(u){
-#   
-#   n = nrow(obs_data)
-#   val = c()
-#   for(v in c((Delta+1):(min(u,Delta+m)))){
-#     cur = sum( (obs_data$Yi == v) & (obs_data$Xi == u) )
-#     val = append(val, cur/n)
-#   }
-#   
-#   return(sum(val))
-# }
-# 
-# h_u_v = function(u,v){
-#   
-#   n = nrow(obs_data)
-#   val = sum( (obs_data$Yi == v) & (obs_data$Xi == u) )
-#   return(sum(val) / n)
-#   
-# }
-
-P_constraint = function(p_input){
-  
-  n = nrow(obs_data)
-  
-  LHS = c()
-  for(k in c((Delta + 1):(Delta + m))){
-    A = gnv(k)
-    B = sum(mapply(f_X, c(k:omega), p_input))
-    C = sum(mapply(df_dp, c(k:omega), p_input))
-    LHS = append(LHS, (A / B) * C )
-  }
-  
-  RHS = c()
-  for(i in c(1:n)){
-    if(obs_data$Di[i] == 1){
-      A = df_dp(obs_data$Zi[i], p_input)
-      B = f_X(obs_data$Zi[i], p_input)
-    }
-    if(obs_data$Di[i] == 0){
-      A = dS_dp(obs_data$Zi[i] + 1, p_input)
-      B = S_X(obs_data$Zi[i] + 1, p_input)
-    }
-    
-    RHS = append(RHS, A/B)
-  
-  }
-  
-  return( ((sum(RHS) / n) - sum(LHS))^2 )
-  
-}
-
-g_tau_hat = function(v, p_input){
-  
-  v_min = Delta + 1
-  v_max = m + Delta
-  
-  A = gnv(v) / S_X(v, p_input)
-  B = mapply(gnv, c(v_min:v_max))
-  C = mapply(S_X, c(v_min:v_max), p_input)
-  return( A * (sum( B/C ))^(-1) )
   
 }
 
@@ -464,7 +326,7 @@ psi = function(Yi, Zi, Di, THETA){
     d = S_X(Zi + 1, THETA)
     e = dS_dp(Zi + 1, THETA)
   }
-    
+  
   rhs = e/d
   
   
@@ -504,8 +366,3 @@ dpsi_dp = function(Yi, Zi, Di, THETA){
   return(sum(lhs) - rhs)
   
 }
-
-
-
-
-
