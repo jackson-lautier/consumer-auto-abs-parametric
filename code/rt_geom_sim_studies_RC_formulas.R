@@ -14,7 +14,7 @@ f_X = function(u, THETA){
 
 g_Y = function(v, THETA){
   
-  if( ((Delta + 1) <= v) & (v <= (Delta + m)) ){
+  if( ((Delta + 1) <= v) & (v <= (Delta + M)) ){
     vec_idx = v + 1 - Delta
     return( THETA[vec_idx] )
   }
@@ -25,8 +25,8 @@ alpha = function(THETA){
   
   res = c()
   for(u in c((Delta + 1):(omega))){
-    v_end = min(u + 1 - Delta, Delta + m + 1)
-    g_sum = sapply(c((Delta + 1):(min(u, Delta + m))), g_Y, THETA = THETA)
+    v_end = min(u + 1 - Delta, Delta + M + 1)
+    g_sum = sapply(c((Delta + 1):(min(u, Delta + M))), g_Y, THETA = THETA)
     res = append(res,
                  f_X(u, THETA) * sum(g_sum))
     
@@ -41,7 +41,7 @@ h_star = function(u , v, THETA){
   if( ((Delta + 1) <= u) &
       (u <= omega) &
       ((Delta + 1) <= v) &
-      (v <= (Delta + m)) &
+      (v <= (Delta + M)) &
       (v <= u)){
     
     return(
@@ -59,7 +59,7 @@ h_bar_star = function(u, v, THETA){
   if( ((Delta + 1) <= u) &
       (u <= omega) &
       ((Delta + 1) <= v) &
-      (v <= (Delta + m)) &
+      (v <= (Delta + M)) &
       (v <= u)){
     
     return(
@@ -170,8 +170,8 @@ da_dp = function(THETA){
   
   res = c()
   for(u in c((Delta + 1):(omega))){
-    v_end = min(u + 1 - Delta, Delta + m + 1)
-    g_sum = sapply(c((Delta + 1):(min(u, Delta + m))), g_Y, THETA = THETA)
+    v_end = min(u + 1 - Delta, Delta + M + 1)
+    g_sum = sapply(c((Delta + 1):(min(u, Delta + M))), g_Y, THETA = THETA)
     res = append(res,
                  df_dp(u, THETA) * sum(g_sum))
     
@@ -186,8 +186,8 @@ d2a_dp2 = function(THETA){
   
   res = c()
   for(u in c((Delta + 1):(omega))){
-    v_end = min(u + 1 - Delta, Delta + m + 1)
-    g_sum = sapply(c((Delta + 1):(min(u, Delta + m))), g_Y, THETA = THETA)
+    v_end = min(u + 1 - Delta, Delta + M + 1)
+    g_sum = sapply(c((Delta + 1):(min(u, Delta + M))), g_Y, THETA = THETA)
     res = append(res,
                  d2f_dp2(u, THETA) * sum(g_sum))
     
@@ -211,48 +211,48 @@ d2a_dpdgv = function(v, THETA){
   
 }
 
-u = c( (Delta + 1) : omega)
-reps = length(c( (Delta + 1) : (Delta + m)))
-
-x_col = c()
-y_col = c()
-for(u in c( (Delta + 1) : omega)){
-
-  for(v in c( (Delta + 1) : (Delta + m))){
-    if(v <= u){
-      x_col = append(x_col, u)
-      y_col = append(y_col, v)
-    }
-  }
-
-}
-
-h_prob = c()
-for(i in c(1:length(x_col))){
-  h_prob = append(h_prob, h_star(x_col[i], y_col[i], THETA))
-}
-
-h_sum = c()
-for(i in c(1:length(x_col))){
-  h_sum = append(h_sum, sum(h_prob[1:i]))
-}
-
-l_bound = c(0, h_sum[1:((length(h_prob)-1))])
-u_bound = h_sum
-
-h_inv = data.frame("X" = x_col,
-                   "Y" = y_col,
-                   "l_bound" = l_bound,
-                   "u_bound" = u_bound)
-
-h_sim = function(unif){
-
-  X_i = h_inv$X[(h_inv$l_bound <= unif) & (h_inv$u_bound >= unif)]
-  Y_i = h_inv$Y[(h_inv$l_bound <= unif) & (h_inv$u_bound >= unif)]
-
-  return(c(X_i, Y_i))
-
-}
+# u = c( (Delta + 1) : omega)
+# reps = length(c( (Delta + 1) : (Delta + M)))
+# 
+# x_col = c()
+# y_col = c()
+# for(u in c( (Delta + 1) : omega)){
+# 
+#   for(v in c( (Delta + 1) : (Delta + M))){
+#     if(v <= u){
+#       x_col = append(x_col, u)
+#       y_col = append(y_col, v)
+#     }
+#   }
+# 
+# }
+# 
+# h_prob = c()
+# for(i in c(1:length(x_col))){
+#   h_prob = append(h_prob, h_star(x_col[i], y_col[i], THETA))
+# }
+# 
+# h_sum = c()
+# for(i in c(1:length(x_col))){
+#   h_sum = append(h_sum, sum(h_prob[1:i]))
+# }
+# 
+# l_bound = c(0, h_sum[1:((length(h_prob)-1))])
+# u_bound = h_sum
+# 
+# h_inv = data.frame("X" = x_col,
+#                    "Y" = y_col,
+#                    "l_bound" = l_bound,
+#                    "u_bound" = u_bound)
+# 
+# h_sim = function(unif){
+# 
+#   X_i = h_inv$X[(h_inv$l_bound <= unif) & (h_inv$u_bound >= unif)]
+#   Y_i = h_inv$Y[(h_inv$l_bound <= unif) & (h_inv$u_bound >= unif)]
+# 
+#   return(c(X_i, Y_i))
+# 
+# }
 
 #likelihood function equation (4)
 # log_like_fn = function(THETA){
@@ -262,7 +262,7 @@ h_sim = function(unif){
 #   n = nrow(obs_data)
 #   
 #   Li = c()
-#   for(k in c((Delta + 1):(Delta + m))){
+#   for(k in c((Delta + 1):(Delta + M))){
 #     for(j in c(k:(omega))){
 #       cnt = sum(( (obs_data$Yi == k ) & (obs_data$Xi == j) ))
 #       val = ( f_X(j, THETA) * g_Y(k, THETA) ) / alpha(THETA)
@@ -315,7 +315,7 @@ log_like_fn = function(THETA){
 #   
 #   n = nrow(obs_data)
 #   val = c()
-#   for(v in c((Delta+1):(min(u,Delta+m)))){
+#   for(v in c((Delta+1):(min(u,Delta+M)))){
 #     cur = sum( (obs_data$Yi == v) & (obs_data$Xi == u) )
 #     val = append(val, cur/n)
 #   }
@@ -336,7 +336,7 @@ P_constraint = function(p_input){
   n = nrow(obs_data)
   
   LHS = c()
-  for(k in c((Delta + 1):(Delta + m))){
+  for(k in c((Delta + 1):(Delta + M))){
     A = gnv(k)
     B = sum(mapply(f_X, c(k:omega), p_input))
     C = sum(mapply(df_dp, c(k:omega), p_input))
@@ -365,7 +365,7 @@ P_constraint = function(p_input){
 g_tau_hat = function(v, p_input){
   
   v_min = Delta + 1
-  v_max = m + Delta
+  v_max = M + Delta
   
   A = gnv(v) / S_X(v, p_input)
   B = mapply(gnv, c(v_min:v_max))
@@ -381,7 +381,7 @@ gnv = function(v){
 g_tau_MLE = function(v, a, b){
   
   v_min = Delta + 1
-  v_max = m + Delta
+  v_max = M + Delta
   
   A = gnv(v) * (1 - (b/a))^(v - (Delta + 1))
   B = mapply(gnv, c(v_min:v_max))
@@ -394,7 +394,7 @@ g_tau_MLE = function(v, a, b){
 thm_formulas = function(obs_data){
   
   a1 = c()
-  for(k in c((Delta+1):(Delta+m))){
+  for(k in c((Delta+1):(Delta+M))){
     a1 = append(a1, (k - (Delta+1)) * gnv(k))
   }
   a2 = c()
@@ -418,7 +418,7 @@ thm_formulas = function(obs_data){
   p_hat = b / (b - a)
   
   G_hat = c()
-  for(k in c((Delta+1):(Delta+m))){
+  for(k in c((Delta+1):(Delta+M))){
     G_hat = append(G_hat, g_tau_MLE(k, a, b) )
   }
   
@@ -448,7 +448,7 @@ psi = function(Yi, Zi, Di, THETA){
   lhs = c()
   rhs = c()
   
-  for(v in c((Delta + 1):(Delta + m))){
+  for(v in c((Delta + 1):(Delta + M))){
     a = Yi_ind(Yi, v)
     b = sum(sapply(c((v):(omega)), f_X, THETA))
     c = sum(sapply(c((v):(omega)), df_dp, THETA))
@@ -477,7 +477,7 @@ dpsi_dp = function(Yi, Zi, Di, THETA){
   lhs = c()
   rhs = c()
   
-  for(v in c((Delta + 1):(Delta + m))){
+  for(v in c((Delta + 1):(Delta + M))){
     
     a = Yi_ind(Yi, v)
     

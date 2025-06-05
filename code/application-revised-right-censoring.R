@@ -1,10 +1,10 @@
 #2017 - 50 month loans
 rm(list=ls())
 
-obs_data = read.csv('./data-clean/aart-2017-50mo.csv')
+obs_data = read.csv('./data-clean/aart-2017-50mo-2.csv')
 obs_data = obs_data[,-1]
 
-trap_param = read.csv('./data-clean/aart-2017-50mo-trapezoid-dim.csv')
+trap_param = read.csv('./data-clean/aart-2017-50mo-trapezoid-dim-2.csv')
 
 delta = trap_param$delta
 M = trap_param$m

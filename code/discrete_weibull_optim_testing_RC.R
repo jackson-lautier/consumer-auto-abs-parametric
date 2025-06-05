@@ -1,18 +1,18 @@
-p.val = seq(0.10, 0.95, by = 0.0085)
-b.val = seq(0.750, 1.500, by = 0.0075)
+p.start = 0.970
+p.end = 0.995
+seq.length = 50
+p.val = seq(p.start, p.end, by = (p.end - p.start)/seq.length)
+b.start = 1.00
+b.end = 1.40
+b.val = seq(b.start, b.end, by = (b.end - b.start)/seq.length)
 
-#p.val = seq(0.965, 0.97, by = 5e-05)
-#b.val = seq(0.910, 0.925, by = 0.00015)
-
-p.val = seq(0.900, 0.999, by = 0.00099)
-b.val = seq(0.750, 1.500, by = 0.0075)
 
 P_constraint_2 = function(p.param, b.param){
   
   P_input = c(p.param, b.param)
   
   v_min = Delta + 1
-  v_max = m + Delta
+  v_max = M + Delta
   
   G_dummy = 1 / rep(v_max - v_min + 1, v_max - v_min + 1)
   THETA_input = c(P_input, G_dummy)
@@ -20,7 +20,7 @@ P_constraint_2 = function(p.param, b.param){
   n = nrow(obs_data)
   
   LHS1 = c()
-  for(k in c((Delta + 1):(Delta + m))){
+  for(k in c((Delta + 1):(Delta + M))){
     A = gnv(k)
     B = sum(sapply(c(k:omega), f_X, THETA = THETA_input))
     C = sum(sapply(c(k:omega), df_dp, THETA = THETA_input))
@@ -43,7 +43,7 @@ P_constraint_2 = function(p.param, b.param){
   }
   
   LHS2 = c()
-  for(k in c((Delta + 1):(Delta + m))){
+  for(k in c((Delta + 1):(Delta + M))){
     A = gnv(k)
     B = sum(sapply(c(k:omega), f_X, THETA = THETA_input))
     C = sum(sapply(c(k:omega), df_db, THETA = THETA_input))
@@ -83,6 +83,50 @@ filled.contour(p.val, b.val, z,
 which(z == min(z), arr.ind=TRUE)
 p.val[which(z == min(z), arr.ind=TRUE)[1]]
 b.val[which(z == min(z), arr.ind=TRUE)[2]]
-P_constraint_2(0.99108, 1.245)
+P_constraint_2(p.val[which(z == min(z), arr.ind=TRUE)[1]],
+               b.val[which(z == min(z), arr.ind=TRUE)[2]])
 
-which(z <= 0.0299, arr.ind=TRUE)
+p.con.min = 0.001
+which(z <= p.con.min, arr.ind=TRUE)
+
+p.val[which(z <= p.con.min, arr.ind=TRUE)[,1]]
+b.val[which(z <= p.con.min, arr.ind=TRUE)[,2]]
+
+#p.val = 0.99487
+#b.val = 1.4025
+#P-constraint = 0.007265869
+
+#25mo loans (aart-2017-25mo)
+#p.val = 0.98388
+#b.val = 1.198
+#P-constraint = 0.001201568
+
+#50mo loans (aart-2017-50mo-2)
+#p.val = 0.98514
+#b.val = 1.1374
+#P-constraint = 0.007265869
+
+#50mo loans (aart-2017-50mo)
+#p.val = 0.9874
+#b.val = 1.168
+#P-constraint = 0.007257382
+
+#37mo loans (aart-2017-37mo)
+#p.val = 0.9895
+#b.val = 1.271
+#P-constraint = 0.001575376
+
+#37mo loans (aart-2017-37mo) - super-prime only
+#p.val = 0.98428
+#b.val = 1.15
+#P-constraint = 0.001521468
+
+#38mo loans (aart-2017-38mo) - super-prime only
+#p.val = 0.992
+#b.val = 1.336
+#P-constraint = 2.259926e-05
+
+#25mo loans (aart-2019-25mo)
+#p.val = 0.98258
+#b.val = 1.2792
+#P-constraint = 0.001995938

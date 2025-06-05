@@ -213,6 +213,7 @@ aart = aart[aart$risk_cat_ir == "super_prime",]
 table(aart$Xc)
 
 aart$Xc = ifelse(aart$Xc >= loan_term_c - 2, loan_term_c - 2, aart$Xc) #make 48 month loans
+aart$Xc = ifelse(aart$Xc >= loan_term_c, loan_term_c, aart$Xc) #make 50 month loans
 table(aart$Xc)
 
 
@@ -222,7 +223,7 @@ names(obs_data)[names(obs_data) == 'aart.Y'] <- 'Y'
 names(obs_data)[names(obs_data) == 'aart.C'] <- 'C'
 n = nrow(obs_data)
 
-write.csv(obs_data, './data-clean/aart-2017-50mo.csv')
+write.csv(obs_data, './data-clean/aart-2017-50mo-2.csv')
 
 aart.2017.50mo.parameters = data.frame("delta" = delta,
                                        "m" = M,
@@ -230,7 +231,7 @@ aart.2017.50mo.parameters = data.frame("delta" = delta,
                                        "e" = len_obs_window + (M + delta))
 
 write.csv(aart.2017.50mo.parameters,
-          './data-clean/aart-2017-50mo-trapezoid-dim.csv')
+          './data-clean/aart-2017-50mo-trapezoid-dim-2.csv')
 
 
 #aart 2017 - 73 month loans
@@ -349,9 +350,355 @@ write.csv(aart.2017.73mo.parameters,
 
 
 
+#aart 2017 - 37 month loans
+
+rm(list=ls())
+
+source("./code/default_time.R")
+
+loan_term_c = 37 #left-truncation only; no right-censoring
+len_obs_window = 43 #num. mnths in obs. window
+
+path = "./data/"
+aart <- read.csv(paste(path,'aart173_compiledr.csv',sep=""))
+
+summary(aart$reportingPeriodBeginningLoanBalanceAmount)
+
+date <- paste(aart$originationDate,"-01",sep="")
+date <- as.Date(date, "%m/%Y-%d")
+min(date); max(date)
 
 
+min(as.numeric(aart$obligorCreditScore), na.rm = TRUE)
+mean(as.numeric(aart$obligorCreditScore), na.rm = TRUE)
+median(as.numeric(aart$obligorCreditScore), na.rm = TRUE)
+max(as.numeric(aart$obligorCreditScore), na.rm = TRUE)
 
+min(aart$originalLoanTerm); max(aart$originalLoanTerm)
+
+aart <- aart[aart$originalLoanTerm == loan_term_c,] 
+
+
+#calculate remaining payments
+aart_trust_start_date = "06-01-2017"
+date <- paste(aart$originationDate,"-01",sep="")
+date <- as.Date(date, "%m/%Y-%d")
+age = interval(date,as.Date(aart_trust_start_date,"%m-%d-%Y")) %/% months(1)
+aart$initialLoanAge = age
+
+aart$remainingTermtoMaturityNumber = aart$originalLoanTerm - aart$initialLoanAge
+
+#create credit risk categories
+aart$risk_cat_ir <- as.factor(
+  ifelse(aart$originalInterestRatePercentage<0.05,"super_prime",
+         ifelse(aart$originalInterestRatePercentage<0.10,"prime",
+                ifelse(aart$originalInterestRatePercentage<0.15,"near_prime",
+                       ifelse(aart$originalInterestRatePercentage<0.20,"subprime","deep_subprime")))))
+
+delta = loan_term_c - max(aart$remainingTermtoMaturityNumber) 
+M = loan_term_c - min(aart$remainingTermtoMaturityNumber) - delta
+T_start = M + delta + aart$remainingTermtoMaturityNumber - loan_term_c 
+Y = M + delta - T_start + 1
+
+######################################################################
+######################################################################
+######################################################################
+# algorithm to find loan outcomes (def, repay, cens)
+######################################################################
+######################################################################
+######################################################################
+X = vector()
+C = vector()
+D = vector()
+R = vector()
+
+for (j in c(1:nrow(aart))) {
+  c_bond = default_time(aart[j,])
+  X = append(X, c_bond[1])
+  C = append(C, c_bond[2])
+  R = append(R, c_bond[3])
+  D = append(D, c_bond[4])
+}
+
+#shift back to the original timeline
+Xc = M + delta + X - T_start + 1
+
+######################################################################
+######################################################################
+aart = cbind(aart,Y,X,Xc,C,D,R)
+
+a_cens = aart[aart$C == 1,]
+n = nrow(a_cens)
+check = c()
+
+for (i in c(1:n)) {
+  b_dat = a_cens[i,]
+  
+  final_bal = as.numeric(b_dat[1,paste("BAL",len_obs_window,sep="")])
+  check = append(check,
+                 ifelse(is.na(final_bal),"check",0))
+}
+
+bad_data = a_cens$assetNumber[check == "check"]
+length(bad_data) #2 loans
+
+aart = aart[!(aart$assetNumber %in% bad_data),]
+
+aart = aart[aart$risk_cat_ir == "super_prime",]
+table(aart$Xc)
+
+#remove loans with terms greater than 38 months (possible extensions)
+aart$Xc = ifelse(aart$Xc >= loan_term_c + 1, loan_term_c + 1, aart$Xc)
+table(aart$Xc)
+
+obs_data <- data.frame(aart$Xc,aart$Y,aart$C)
+names(obs_data)[names(obs_data) == 'aart.Xc'] <- 'Z'
+names(obs_data)[names(obs_data) == 'aart.Y'] <- 'Y'
+names(obs_data)[names(obs_data) == 'aart.C'] <- 'C'
+n = nrow(obs_data)
+
+#remove Y > max X values
+obs_data = obs_data[-which(obs_data$Y >= loan_term_c + 1),]
+
+write.csv(obs_data, './data-clean/aart-2017-37mo.csv')
+
+aart.2017.37mo.parameters = data.frame("delta" = delta,
+                                       "m" = M,
+                                       "omega" = max(obs_data$Z),
+                                       "e" = len_obs_window + (M + delta))
+
+write.csv(aart.2017.37mo.parameters,
+          './data-clean/aart-2017-37mo-trapezoid-dim.csv')
+
+
+#aart 2017 - 38 month loans
+
+rm(list=ls())
+
+source("./code/default_time.R")
+
+loan_term_c = 38 #left-truncation only; no right-censoring
+len_obs_window = 43 #num. mnths in obs. window
+
+path = "./data/"
+aart <- read.csv(paste(path,'aart173_compiledr.csv',sep=""))
+
+summary(aart$reportingPeriodBeginningLoanBalanceAmount)
+
+date <- paste(aart$originationDate,"-01",sep="")
+date <- as.Date(date, "%m/%Y-%d")
+min(date); max(date)
+
+
+min(as.numeric(aart$obligorCreditScore), na.rm = TRUE)
+mean(as.numeric(aart$obligorCreditScore), na.rm = TRUE)
+median(as.numeric(aart$obligorCreditScore), na.rm = TRUE)
+max(as.numeric(aart$obligorCreditScore), na.rm = TRUE)
+
+min(aart$originalLoanTerm); max(aart$originalLoanTerm)
+
+aart <- aart[aart$originalLoanTerm == loan_term_c,] 
+
+
+#calculate remaining payments
+aart_trust_start_date = "06-01-2017"
+date <- paste(aart$originationDate,"-01",sep="")
+date <- as.Date(date, "%m/%Y-%d")
+age = interval(date,as.Date(aart_trust_start_date,"%m-%d-%Y")) %/% months(1)
+aart$initialLoanAge = age
+
+aart$remainingTermtoMaturityNumber = aart$originalLoanTerm - aart$initialLoanAge
+
+#create credit risk categories
+aart$risk_cat_ir <- as.factor(
+  ifelse(aart$originalInterestRatePercentage<0.05,"super_prime",
+         ifelse(aart$originalInterestRatePercentage<0.10,"prime",
+                ifelse(aart$originalInterestRatePercentage<0.15,"near_prime",
+                       ifelse(aart$originalInterestRatePercentage<0.20,"subprime","deep_subprime")))))
+
+delta = loan_term_c - max(aart$remainingTermtoMaturityNumber) 
+M = loan_term_c - min(aart$remainingTermtoMaturityNumber) - delta
+T_start = M + delta + aart$remainingTermtoMaturityNumber - loan_term_c 
+Y = M + delta - T_start + 1
+
+######################################################################
+######################################################################
+######################################################################
+# algorithm to find loan outcomes (def, repay, cens)
+######################################################################
+######################################################################
+######################################################################
+X = vector()
+C = vector()
+D = vector()
+R = vector()
+
+for (j in c(1:nrow(aart))) {
+  c_bond = default_time(aart[j,])
+  X = append(X, c_bond[1])
+  C = append(C, c_bond[2])
+  R = append(R, c_bond[3])
+  D = append(D, c_bond[4])
+}
+
+#shift back to the original timeline
+Xc = M + delta + X - T_start + 1
+
+######################################################################
+######################################################################
+aart = cbind(aart,Y,X,Xc,C,D,R)
+
+a_cens = aart[aart$C == 1,]
+n = nrow(a_cens)
+check = c()
+
+for (i in c(1:n)) {
+  b_dat = a_cens[i,]
+  
+  final_bal = as.numeric(b_dat[1,paste("BAL",len_obs_window,sep="")])
+  check = append(check,
+                 ifelse(is.na(final_bal),"check",0))
+}
+
+bad_data = a_cens$assetNumber[check == "check"]
+length(bad_data) #2 loans
+
+aart = aart[!(aart$assetNumber %in% bad_data),]
+
+aart = aart[aart$risk_cat_ir == "super_prime",]
+table(aart$Xc)
+
+#remove loans with terms greater than 38 months (possible extensions)
+aart$Xc = ifelse(aart$Xc >= loan_term_c + 1, loan_term_c + 1, aart$Xc)
+table(aart$Xc)
+
+obs_data <- data.frame(aart$Xc,aart$Y,aart$C)
+names(obs_data)[names(obs_data) == 'aart.Xc'] <- 'Z'
+names(obs_data)[names(obs_data) == 'aart.Y'] <- 'Y'
+names(obs_data)[names(obs_data) == 'aart.C'] <- 'C'
+n = nrow(obs_data)
+
+
+write.csv(obs_data, './data-clean/aart-2017-38mo.csv')
+
+aart.2017.37mo.parameters = data.frame("delta" = delta,
+                                       "m" = M,
+                                       "omega" = max(obs_data$Z),
+                                       "e" = len_obs_window + (M + delta))
+
+write.csv(aart.2017.37mo.parameters,
+          './data-clean/aart-2017-38mo-trapezoid-dim.csv')
+
+
+#2019 25mo loans
+rm(list=ls())
+
+source("./code/default_time.R")
+
+loan_term_c = c(25)
+len_obs_window = 46 #num. mnths in obs. window from CRC paper
+
+path = "./data/"
+aart <- read.csv(paste(path,'aart193_compiledr.csv',sep=""))
+
+date <- paste(aart$originationDate,"-01",sep="")
+date <- as.Date(date, "%m/%Y-%d")
+min(date); max(date)
+
+
+min(as.numeric(aart$obligorCreditScore), na.rm = TRUE)
+mean(as.numeric(aart$obligorCreditScore), na.rm = TRUE)
+median(as.numeric(aart$obligorCreditScore), na.rm = TRUE)
+max(as.numeric(aart$obligorCreditScore), na.rm = TRUE)
+
+min(aart$originalLoanTerm); max(aart$originalLoanTerm)
+
+aart <- aart[aart$originalLoanTerm == loan_term_c,] 
+
+#calculate remaining payments
+aart_trust_start_date = "08-01-2019"
+date <- paste(aart$originationDate,"-01",sep="")
+date <- as.Date(date, "%m/%Y-%d")
+age = interval(date,as.Date(aart_trust_start_date,"%m-%d-%Y")) %/% months(1)
+aart$initialLoanAge = age
+
+aart$remainingTermtoMaturityNumber = aart$originalLoanTerm - aart$initialLoanAge
+
+#create credit risk categories
+aart$risk_cat_ir <- as.factor(
+  ifelse(aart$originalInterestRatePercentage<0.05,"super_prime",
+         ifelse(aart$originalInterestRatePercentage<0.10,"prime",
+                ifelse(aart$originalInterestRatePercentage<0.15,"near_prime",
+                       ifelse(aart$originalInterestRatePercentage<0.20,"subprime","deep_subprime")))))
+
+delta = loan_term_c - max(aart$remainingTermtoMaturityNumber) 
+M = loan_term_c - min(aart$remainingTermtoMaturityNumber) - delta
+T_start = M + delta + aart$remainingTermtoMaturityNumber - loan_term_c 
+Y = M + delta - T_start + 1
+
+######################################################################
+######################################################################
+######################################################################
+# algorithm to find loan outcomes (def, repay, cens)
+######################################################################
+######################################################################
+######################################################################
+X = vector()
+C = vector()
+D = vector()
+R = vector()
+
+for (j in c(1:nrow(aart))) {
+  c_bond = default_time(aart[j,])
+  X = append(X, c_bond[1])
+  C = append(C, c_bond[2])
+  R = append(R, c_bond[3])
+  D = append(D, c_bond[4])
+}
+
+#shift back to the original timeline
+Xc = M + delta + X - T_start + 1
+
+######################################################################
+######################################################################
+aart = cbind(aart,Y,X,Xc,C,D,R)
+
+a_cens = aart[aart$C == 1,]
+n = nrow(a_cens)
+check = c()
+
+for (i in c(1:n)) {
+  b_dat = a_cens[i,]
+  
+  final_bal = as.numeric(b_dat[1,paste("BAL",len_obs_window,sep="")])
+  check = append(check,
+                 ifelse(is.na(final_bal),"check",0))
+}
+
+bad_data = a_cens$assetNumber[check == "check"]
+length(bad_data) #24 'bad' loans of 2,195
+
+aart = aart[!(aart$assetNumber %in% bad_data),]
+
+table(aart$Xc)
+aart$Xc = ifelse(aart$Xc >= 26, 26, aart$Xc)
+table(aart$Xc)
+
+obs_data <- data.frame(aart$Xc,aart$Y,aart$C)
+names(obs_data)[names(obs_data) == 'aart.Xc'] <- 'Z'
+names(obs_data)[names(obs_data) == 'aart.Y'] <- 'Y'
+names(obs_data)[names(obs_data) == 'aart.C'] <- 'C'
+n = nrow(obs_data)
+
+write.csv(obs_data, './data-clean/aart-2019-25mo.csv')
+
+aart.2019.25mo.parameters = data.frame("delta" = delta,
+                                       "m" = M,
+                                       "omega" = max(obs_data$Z),
+                                       "e" = len_obs_window + (M + delta))
+
+write.csv(aart.2019.25mo.parameters,
+          './data-clean/aart-2019-25mo-trapezoid-dim.csv')
 
 
 
