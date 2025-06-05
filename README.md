@@ -2,6 +2,11 @@
 
 <p align="center"><project-description></p>
 
+## NOTE: REVISIONS IN PROGRESS
+
+As of Spring 2025, this repository is in a revision state.  Once complete, this
+note will be removed.
+
 ## Introduction
 
 This repository is intended as an online supplement to the manuscript,
