@@ -1,9 +1,9 @@
-p.start = 0.970
-p.end = 0.995
-seq.length = 50
+p.start = 0.50
+p.end = 0.999
+seq.length = 100
 p.val = seq(p.start, p.end, by = (p.end - p.start)/seq.length)
 b.start = 1.00
-b.end = 1.40
+b.end = 2.00
 b.val = seq(b.start, b.end, by = (b.end - b.start)/seq.length)
 
 
@@ -75,7 +75,7 @@ P_constraint_3 <- Vectorize(P_constraint_2)
 
 z <- outer(p.val,b.val,P_constraint_3);
 
-persp(p.val, b.val, z, theta = -25, phi = 30, col = "lightblue")
+persp(p.val, b.val, z, theta = -35, phi = 40, col = "lightblue")
 contour(p.val, b.val, z)
 filled.contour(p.val, b.val, z,
                xlab = "p", ylab = "b")

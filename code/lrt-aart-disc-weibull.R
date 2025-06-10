@@ -1,12 +1,11 @@
-#2017 - 50 month loans
 rm(list=ls())
 
-obs_data = read.csv('./data-clean/aart-2017-38mo.csv')
+obs_data = read.csv('./data-clean/aart-2017-50mo-2.csv')
 obs_data = obs_data[,-1]
 
-trap_param = read.csv('./data-clean/aart-2017-38mo-trapezoid-dim.csv')
+trap_param = read.csv('./data-clean/aart-2017-50mo-trapezoid-dim-2.csv')
 
-Delta = trap_param$delta #+ 1 #four for 50mo data ---> need to check (and 2017-38mo loans)
+Delta = trap_param$delta + 1 #four for 50mo-2 data ---> need to check (and 2017-38mo loans)
 #M = trap_param$m
 M = max(obs_data$Y) - Delta #for 36mo loans bc of max cap
 epsilon = trap_param$e
@@ -32,18 +31,18 @@ source("./code/ime-formulas.R")
 source("./code/rt_discrete_weibull_sim_studies_RC_formulas.R")
 
 #find parameters
-#init = c(0.98388, 1.198) #from visual analysis; need increasing hazard (2017-25mo)
-#init = c(0.98912, 1.219) #from visual analysis; need increasing hazard (2017-50mo-2)
+#init = c(0.9899, 1.34) #from visual analysis; need increasing hazard (2017-25mo)
+init = c(0.98964, 1.2316) #from visual analysis; need increasing hazard (2017-50mo-2)
 #init = c(0.9874, 1.168) #from visual analysis; need increasing hazard (2017-50mo)
 #init = c(0.9895, 1.271) #from visual analysis; need increasing hazard (2017-37mo)
-#init = c(0.98258,1.2792) #from visual analysis; need increasing hazard (2019-25mo)
+#init = c(0.98774, 1.3888) #from visual analysis; need increasing hazard (2019-25mo)
 #init = c(0.98428, 1.15) #from visual analysis; need increasing hazard (2017-37mo) - super-prime only
-init = c(0.992, 1.336) #from visual analysis; need increasing hazard (2017-38mo) - super-prime only
+#init = c(0.992, 1.336) #from visual analysis; need increasing hazard (2017-38mo) - super-prime only
 
 p_hat =
   optim(init,P_constraint,method="L-BFGS-B",
-      lower=c(0.990,1.330),
-      upper=c(0.995,1.134))$par
+      lower=c(0.985,1.22),
+      upper=c(0.995,1.25))$par
 
 G_hat =
   sapply(c((Delta + 1):(M+Delta)),

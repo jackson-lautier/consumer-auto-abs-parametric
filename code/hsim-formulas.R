@@ -1,11 +1,11 @@
 u = c( (Delta + 1) : omega)
-reps = length(c( (Delta + 1) : (Delta + m)))
+reps = length(c( (Delta + 1) : (Delta + M)))
 
 x_col = c()
 y_col = c()
 for(u in c( (Delta + 1) : omega)){
   
-  for(v in c( (Delta + 1) : (Delta + m))){
+  for(v in c( (Delta + 1) : (Delta + M))){
     if(v <= u){
       x_col = append(x_col, u)
       y_col = append(y_col, v)

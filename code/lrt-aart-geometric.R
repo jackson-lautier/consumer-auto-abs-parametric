@@ -1,12 +1,12 @@
 #2017 - 50 month loans
 rm(list=ls())
 
-obs_data = read.csv('./data-clean/aart-2017-38mo.csv')
+obs_data = read.csv('./data-clean/aart-2017-50mo-2.csv')
 obs_data = obs_data[,-1]
 
-trap_param = read.csv('./data-clean/aart-2017-38mo-trapezoid-dim.csv')
+trap_param = read.csv('./data-clean/aart-2017-50mo-trapezoid-dim-2.csv')
 
-Delta = trap_param$delta #+ 1 #four for 2017-50mo data ---> need to check (also 2017-38mo)
+Delta = trap_param$delta + 1 #four for 2017-50mo data ---> need to check (also 2017-38mo)
 #M = trap_param$m
 M = max(obs_data$Y) - Delta #for 36mo loans bc of max cap
 epsilon = trap_param$e
