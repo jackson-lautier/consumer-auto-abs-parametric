@@ -212,7 +212,7 @@ aart = aart[!(aart$assetNumber %in% bad_data),]
 aart = aart[aart$risk_cat_ir == "super_prime",]
 table(aart$Xc)
 
-aart$Xc = ifelse(aart$Xc >= loan_term_c - 2, loan_term_c - 2, aart$Xc) #make 48 month loans
+#aart$Xc = ifelse(aart$Xc >= loan_term_c - 2, loan_term_c - 2, aart$Xc) #make 48 month loans
 aart$Xc = ifelse(aart$Xc >= loan_term_c, loan_term_c, aart$Xc) #make 50 month loans
 table(aart$Xc)
 
@@ -223,7 +223,7 @@ names(obs_data)[names(obs_data) == 'aart.Y'] <- 'Y'
 names(obs_data)[names(obs_data) == 'aart.C'] <- 'C'
 n = nrow(obs_data)
 
-write.csv(obs_data, './data-clean/aart-2017-50mo-2.csv')
+write.csv(obs_data, './data-clean/aart-2017-50mo.csv')
 
 aart.2017.50mo.parameters = data.frame("delta" = delta,
                                        "m" = M,
@@ -231,7 +231,7 @@ aart.2017.50mo.parameters = data.frame("delta" = delta,
                                        "e" = len_obs_window + (M + delta))
 
 write.csv(aart.2017.50mo.parameters,
-          './data-clean/aart-2017-50mo-trapezoid-dim-2.csv')
+          './data-clean/aart-2017-50mo-trapezoid-dim.csv')
 
 
 #aart 2017 - 73 month loans

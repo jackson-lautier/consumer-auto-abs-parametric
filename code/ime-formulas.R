@@ -15,6 +15,12 @@ lnx <- function(x) {
   
 }
 
+Var_est <- function(x){
+  num = fnx(x) * (Unx(x) - fnx(x))
+  den = (Unx(x))^3
+  return(num/den)
+}
+
 
 gnx <- function(x) {
   return(sum(obs_data$Yi == x) / nrow(obs_data))
