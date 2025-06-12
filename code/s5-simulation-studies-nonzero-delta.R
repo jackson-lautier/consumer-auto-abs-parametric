@@ -34,19 +34,28 @@ dir.create("./results/") #to store results
 rm(list=ls())
 #problem set-up
 
-m = 15
+M = 15
 Delta = 5
 omega = 24
 
 #min = m + Delta + 1
 #max = m + omega (set to this value for no censoring)
-#epsilon = 38
-#tau = epsilon - (m + Delta + 1)
+#epsilon = 25
+#tau = epsilon - (M + Delta + 1)
+#xi = min(omega, epsilon - 1)
 
-p = 0.45
+p = 0.05
 
-G = c(sapply(c(0:9), dbinom, prob = 0.35, size = 9) * 0.4,
-      sapply(c(0:9), dbinom, prob = 0.35, size = 9) * 0.6)
+minU = Delta + 1 
+maxU = omega
+minV = Delta + 1
+maxV = Delta + M
+
+range.1 = c(1:(floor((maxV - minV + 1)/2))) - 1
+range.2 = c(1:(floor((maxV - minV + 1)/2) + (maxV - minV + 1) %% 2)) - 1
+
+G = c(sapply(range.1, dbinom, prob = 0.35, size = length(range.1)) * 0.4,
+      sapply(range.2, dbinom, prob = 0.35, size = length(range.2)) * 0.6)
 
 THETA = c(p, G)
 
@@ -174,13 +183,22 @@ omega = 24
 
 #min = m + Delta + 1
 #max = m + omega (set to this value for no censoring)
-epsilon = 38
+epsilon = 25
 tau = epsilon - (M + Delta + 1)
+xi = min(omega, epsilon - 1)
 
-p = 0.45
+p = 0.05
 
-G = c(sapply(c(0:9), dbinom, prob = 0.35, size = 9) * 0.4,
-      sapply(c(0:9), dbinom, prob = 0.35, size = 9) * 0.6)
+minU = Delta + 1 
+maxU = xi
+minV = Delta + 1
+maxV = Delta + M
+
+range.1 = c(1:(floor((maxV - minV + 1)/2))) - 1
+range.2 = c(1:(floor((maxV - minV + 1)/2) + (maxV - minV + 1) %% 2)) - 1
+
+G = c(sapply(range.1, dbinom, prob = 0.35, size = length(range.1)) * 0.4,
+      sapply(range.2, dbinom, prob = 0.35, size = length(range.2)) * 0.6)
 
 THETA = c(p, G)
 
