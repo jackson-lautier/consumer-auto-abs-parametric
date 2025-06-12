@@ -44,7 +44,7 @@ omega = 24
 #tau = epsilon - (M + Delta + 1)
 #xi = min(omega, epsilon - 1)
 
-p = 0.05
+p = 0.45
 
 minU = Delta + 1 
 maxU = omega
@@ -187,7 +187,7 @@ epsilon = 25
 tau = epsilon - (M + Delta + 1)
 xi = min(omega, epsilon - 1)
 
-p = 0.05
+p = 0.45
 
 minU = Delta + 1 
 maxU = xi
