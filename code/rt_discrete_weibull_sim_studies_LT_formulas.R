@@ -555,3 +555,38 @@ dpsi2_db = function(Xi, Yi, THETA){
 }
 
 
+lambda = function(u, THETA){
+  
+  if(S_X(u, THETA) == 0){
+    return(0)
+  } else {
+    return( f_X(u, THETA) / S_X(u, THETA) )
+  }
+  
+}
+
+dlambda_dp = function(u, THETA){
+  
+  a =
+    df_dp(u, THETA) * S_X(u, THETA) -
+    f_X(u, THETA) * sum(sapply(c(u:omega), df_dp, THETA = THETA))
+  
+  return( a / (S_X(u, THETA)^2) )
+  
+}
+
+dlambda_db = function(u, THETA){
+  
+  a =
+    df_db(u, THETA) * S_X(u, THETA) -
+    f_X(u, THETA) * sum(sapply(c(u:omega), df_db, THETA = THETA))
+  
+  return( a / (S_X(u, THETA)^2) )
+  
+}
+
+
+
+
+
+
