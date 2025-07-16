@@ -20,6 +20,8 @@ require('reshape2') #data melting
 # "./code/ime-formulas.R"
 # "./code/rt_discrete_weibull_sim_studies_RC_formulas.R"
 # "./code/rt_discrete_weibull_sim_studies_LT_formulas.R"
+# "./code/binomial_sim_studies_LT_formulas.R"
+# "./code/binomial_sim_studies_RC_formulas.R"
 
 #supplemental files available as reference
 
@@ -38,7 +40,7 @@ dir.create('./results/')
 ################################################################################
 rm(list=ls())
 
-source("./code/default_time.R")
+#source("./code/default_time.R")
 
 #2017
 
