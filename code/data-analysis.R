@@ -3555,7 +3555,57 @@ THETA = c(P, G)
 source('./code/rt_discrete_weibull_sim_studies_LT_formulas.R')
 source('./code/hsim-formulas.R')
 
+V = matrix(NA, 2, 2)
+#true variance
+cur11 = c()
+for(v in c((Delta + 1):(Delta + m))){
+  for(u in c(v:omega)){
+    cur11 = append(cur11,
+                   (psi1(u,v,THETA)^2) * h_star(u,v,THETA))
+  }
+}
+
+V[1,1] = sum(cur11)
+
+cur12 = c()
+for(v in c((Delta + 1):(Delta + m))){
+  for(u in c(v:omega)){
+    cur12 = append(cur12,
+                   (psi1(u,v,THETA) * psi2(u,v,THETA)) * h_star(u,v,THETA))
+  }
+}
+
+V[1,2] = sum(cur12)
+
+cur21 = c()
+for(v in c((Delta + 1):(Delta + m))){
+  for(u in c(v:omega)){
+    cur21 = append(cur21,
+                   (psi2(u,v,THETA) * psi1(u,v,THETA)) * h_star(u,v,THETA))
+  }
+}
+
+V[2,1] = sum(cur21)
+
+cur22 = c()
+for(v in c((Delta + 1):(Delta + m))){
+  for(u in c(v:omega)){
+    cur22 = append(cur22,
+                   (psi2(u,v,THETA)^2) * h_star(u,v,THETA))
+  }
+}
+
+V[2,2] = sum(cur22)
+
+true_var = solve(V)
+
 samp_sizes = c(100, 250, 1000)
+
+#true variances
+sqrt(true_var[1,1] / samp_sizes) #p1
+sqrt(true_var[2,2] / samp_sizes) #p2
+
+
 replicates = 1000
 
 cov_prob = matrix(NA, nrow = 2, ncol = length(samp_sizes))
@@ -3707,7 +3757,78 @@ for(v in c((Delta + 1):(Delta + m))){
 cens.rate = sum(cur)
 cens.rate
 
+#calculate true variance
+V = matrix(NA, 2, 2)
+
+#true variance
+cur11 = c()
+for(v in c((Delta + 1):(Delta + m))){
+  for(u in c(v:omega)){
+    for(d in c(0:1)){
+      prob1 = d * h_star(u,v,THETA) * 1 * (u <= v + tau)
+      prob2 = (1 - d) * h_bar_star(u, v, THETA) * 1 * (v + tau == u)
+      prob = prob1 + prob2
+      if(prob == 0){
+        cur11 = append(cur11, 0)
+      }
+      if(prob > 0){
+        cur11 = append(cur11, (psi1(v, u, d, THETA)^2) * prob)
+      }
+    }
+  }
+}
+
+V[1,1] = sum(cur11)
+
+cur21 = c()
+for(v in c((Delta + 1):(Delta + m))){
+  for(u in c(v:omega)){
+    for(d in c(0:1)){
+      prob1 = d * h_star(u,v,THETA) * 1 * (u <= v + tau)
+      prob2 = (1 - d) * h_bar_star(u, v, THETA) * 1 * (v + tau == u)
+      prob = prob1 + prob2
+      if(prob == 0){
+        cur21 = append(cur21, 0)
+      }
+      if(prob > 0){
+        cur21 = append(cur21,
+                       (psi1(v, u, d, THETA) * psi2(v, u, d, THETA)) * prob)
+      }
+    }
+  }
+}
+
+V[2,1] = sum(cur21)
+V[1,2] = sum(cur21)
+
+cur22 = c()
+for(v in c((Delta + 1):(Delta + m))){
+  for(u in c(v:omega)){
+    for(d in c(0:1)){
+      prob1 = d * h_star(u,v,THETA) * 1 * (u <= v + tau)
+      prob2 = (1 - d) * h_bar_star(u, v, THETA) * 1 * (v + tau == u)
+      prob = prob1 + prob2
+      if(prob == 0){
+        cur22 = append(cur22, 0)
+      }
+      if(prob > 0){
+        cur22 = append(cur22,
+                       (psi2(v, u, d, THETA)^2) * prob)
+      }
+    }
+  }
+}
+
+V[2,2] = sum(cur22)
+
+true_var = solve(V)
+
 samp_sizes = c(100, 250, 1000)
+
+#true variances
+sqrt(true_var[1,1] / samp_sizes) #p1
+sqrt(true_var[2,2] / samp_sizes) #p2
+
 replicates = 1000
 
 init = c(0.5, 1)
