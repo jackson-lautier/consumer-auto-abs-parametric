@@ -4243,7 +4243,8 @@ P_constraint_2(p.val[which(z == min(z), arr.ind=TRUE)[1]],
 
 plot_grid(p1, p2, p3, p4, nrow = 2)
 
-ggsave("dw-optimization-supplement.pdf",height=4,width=6,device = cairo_pdf)
+ggsave("./results/dw-optimization-supplement.pdf",height=4,width=6,device=cairo_pdf)
+file.remove('./Rplot001.pdf')
 
 
 ################################################################################
