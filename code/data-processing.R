@@ -157,7 +157,7 @@ source("./code/default_time.R")
 loan_term_c = 50 #left-truncation and right-censoring
 len_obs_window = 43 #num. mnths in obs. window
 
-path = "./data/"
+path = "./raw-data/"
 aart <- read.csv(paste(path,'aart173_compiledr.csv',sep=""))
 
 aart <- aart[aart$originalLoanTerm == loan_term_c,]
@@ -264,7 +264,7 @@ source("./code/default_time.R")
 loan_term_c = c(25)
 len_obs_window = 46 #num. mnths in obs. window from CRC paper
 
-path = "./data/"
+path = "./raw-data/"
 aart <- read.csv(paste(path,'aart193_compiledr.csv',sep=""))
 
 aart <- aart[aart$originalLoanTerm == loan_term_c,] 
