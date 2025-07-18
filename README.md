@@ -24,10 +24,9 @@ folder.
 
 - **code** Replication code files.  First run `data-processing.R` to create the
 clean data files in a new folder, **processed-data** (alternatively, rename the
-**data-clean** folder as **processed-data**.  Second, all results in the
-manuscript can be replicated with `data-analysis.R`.  The file runs sequentially
-along with order of appearance of results in the manuscript and then the
-supplemental material.  All results will either print in the R console or be
+**data-clean** folder as **processed-data**).  Second, all results in the
+manuscript can be replicated with `data-analysis.R`.
+All results will either print in the R console or be
 stored in a new folder, **results**.
 
 
