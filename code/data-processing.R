@@ -9,11 +9,7 @@
 # LAUTIER, POZDNYAKOV, YAN
 # 2025
 #
-#R version 4.3.2 (2023-10-31 ucrt) -- "Eye Holes"
-#RStudio 2023.03.0+386 "Cherry Blossom" Release
-#(3c53477afb13ab959aeb5b34df1f10c237b256c3, 2023-03-09) for Windows
-
-#cpu, R details
+# Computer and R version details
 # _                           
 # platform       aarch64-apple-darwin20      
 # arch           aarch64                     
@@ -28,6 +24,22 @@
 # svn rev        85441                       
 # language       R                           
 # version.string R version 4.3.2 (2023-10-31)
+# nickname       Eye Holes
+# _                                
+# platform       x86_64-w64-mingw32               
+# arch           x86_64                           
+# os             mingw32                          
+# crt            ucrt                             
+# system         x86_64, mingw32                  
+# status                                          
+# major          4                                
+# minor          3.2                              
+# year           2023                             
+# month          10                               
+# day            31                               
+# svn rev        85441                            
+# language       R                                
+# version.string R version 4.3.2 (2023-10-31 ucrt)
 # nickname       Eye Holes    
 
 ######################################################################################

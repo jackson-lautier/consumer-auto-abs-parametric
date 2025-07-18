@@ -1,3 +1,47 @@
+######################################################################################
+######################################################################################
+######################################################################################
+# Data analysis scripts to produce the data used in the manuscript:
+# 
+# "ESTIMATING THE TIME-TO-EVENT DISTRIBUTION FOR LOAN-LEVEL
+# DATA WITHIN A CONSUMER AUTO LOAN ASSET-BACKED SECURITY"
+#
+# LAUTIER, POZDNYAKOV, YAN
+# 2025
+#
+# Computer and R version details
+# _                           
+# platform       aarch64-apple-darwin20      
+# arch           aarch64                     
+# os             darwin20                    
+# system         aarch64, darwin20           
+# status                                     
+# major          4                           
+# minor          3.2                         
+# year           2023                        
+# month          10                          
+# day            31                          
+# svn rev        85441                       
+# language       R                           
+# version.string R version 4.3.2 (2023-10-31)
+# nickname       Eye Holes
+# _                                
+# platform       x86_64-w64-mingw32               
+# arch           x86_64                           
+# os             mingw32                          
+# crt            ucrt                             
+# system         x86_64, mingw32                  
+# status                                          
+# major          4                                
+# minor          3.2                              
+# year           2023                             
+# month          10                               
+# day            31                               
+# svn rev        85441                            
+# language       R                                
+# version.string R version 4.3.2 (2023-10-31 ucrt)
+# nickname       Eye Holes
+
 #packages
 require('ggplot2')
 require('extrafont') #may need to load fonts
@@ -27,23 +71,6 @@ require('reshape2') #data melting
 
 # "discrete-weibull-optim-aart-2017-25mo.R"
 # "discrete-weibull-optim-aart-2017-50mo.R"
-
-#cpu, R details
-# _                           
-# platform       aarch64-apple-darwin20      
-# arch           aarch64                     
-# os             darwin20                    
-# system         aarch64, darwin20           
-# status                                     
-# major          4                           
-# minor          3.2                         
-# year           2023                        
-# month          10                          
-# day            31                          
-# svn rev        85441                       
-# language       R                           
-# version.string R version 4.3.2 (2023-10-31)
-# nickname       Eye Holes    
 
 #where processed data will be stored
 dir.create('./results/')
