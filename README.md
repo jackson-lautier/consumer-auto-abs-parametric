@@ -22,10 +22,10 @@ AART 2017-3 and AART 2019-3.
 files are identical to the files created by `data-processing.R' in the **code**
 folder.
 
-- **code** Replication code files.  First run `data-processing.R' to create the
+- **code** Replication code files.  First run `data-processing.R` to create the
 clean data files in a new folder, **processed-data** (alternatively, rename the
 **data-clean** folder as **processed-data**.  Second, all results in the
-manuscript can be replicated with `data-analysis.R'.  The file runs sequentially
+manuscript can be replicated with `data-analysis.R`.  The file runs sequentially
 along with order of appearance of results in the manuscript and then the
 supplemental material.  All results will either print in the R console or be
 stored in a new folder, **results**.
