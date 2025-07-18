@@ -28,6 +28,23 @@ require('reshape2') #data melting
 # "discrete-weibull-optim-aart-2017-25mo.R"
 # "discrete-weibull-optim-aart-2017-50mo.R"
 
+#cpu, R details
+# _                           
+# platform       aarch64-apple-darwin20      
+# arch           aarch64                     
+# os             darwin20                    
+# system         aarch64, darwin20           
+# status                                     
+# major          4                           
+# minor          3.2                         
+# year           2023                        
+# month          10                          
+# day            31                          
+# svn rev        85441                       
+# language       R                           
+# version.string R version 4.3.2 (2023-10-31)
+# nickname       Eye Holes    
+
 #where processed data will be stored
 dir.create('./results/')
 
@@ -3614,6 +3631,10 @@ cov_prob = matrix(NA, nrow = 2, ncol = length(samp_sizes))
 colnames(cov_prob) = paste("n", samp_sizes, sep="")
 rownames(cov_prob) = c("p", "beta")
 
+emp_est = matrix(NA, nrow = 4, ncol = length(samp_sizes))
+colnames(emp_est) = paste("n", samp_sizes, sep="")
+rownames(emp_est) = c("p-mean", "p-SD", "beta-mean", "beta-SD")
+
 init = c(0.5, 1)
 
 for(n in samp_sizes){
@@ -3622,6 +3643,9 @@ for(n in samp_sizes){
   
   cov_ind_p = c()
   cov_ind_b = c()
+  p_est = c()
+  beta_est = c()
+  
   for(r in c(1:replicates)){
     
     #sim data
@@ -3642,6 +3666,9 @@ for(n in samp_sizes){
     THETA_est = optim(init,P_constraint,method="L-BFGS-B",
                       lower=c(0.001,0.001),
                       upper=c(0.999,999))
+    
+    p_est = append(p_est, THETA_est$par[1])
+    beta_est = append(beta_est, THETA_est$par[2])
     
     #variance matrix
     V = matrix(NA, 2, 2)
@@ -3722,10 +3749,17 @@ for(n in samp_sizes){
   cov_prob[1,paste("n", n, sep="")] = sum(cov_ind_p) / replicates
   cov_prob[2,paste("n", n, sep="")] = sum(cov_ind_b) / replicates
   
+  emp_est[1,paste("n", n, sep="")] = mean(p_est)
+  emp_est[2,paste("n", n, sep="")] = sd(p_est)
+  emp_est[3,paste("n", n, sep="")] = mean(beta_est)
+  emp_est[4,paste("n", n, sep="")] = sd(beta_est)
+  
   
 }
 
+emp_est
 cov_prob
+
 
 ################################################################################
 # LEFT-TRUNCATION + RIGHT-CENSORING
@@ -3839,12 +3873,20 @@ cov_prob = matrix(NA, nrow = 2, ncol = length(samp_sizes))
 colnames(cov_prob) = paste("n", samp_sizes, sep="")
 rownames(cov_prob) = c("p", "beta")
 
+emp_est = matrix(NA, nrow = 4, ncol = length(samp_sizes))
+colnames(emp_est) = paste("n", samp_sizes, sep="")
+rownames(emp_est) = c("p-mean", "p-SD", "beta-mean", "beta-SD")
+
+
 for(n in samp_sizes){
   
   print(paste("n", samp_sizes, sep=""))
   
   cov_ind_p = c()
   cov_ind_b = c()
+  p_est = c()
+  beta_est = c()
+  
   for(r in c(1:replicates)){
     
     #sim data
@@ -3867,6 +3909,9 @@ for(n in samp_sizes){
     THETA_est = optim(init,P_constraint,method="L-BFGS-B",
                       lower=c(0.001,0.001),
                       upper=c(0.999,999))
+    
+    p_est = append(p_est, THETA_est$par[1])
+    beta_est = append(beta_est, THETA_est$par[2])
     
     #Vn estimate
     V = matrix(NA, 2, 2)
@@ -3946,9 +3991,15 @@ for(n in samp_sizes){
   cov_prob[1,paste("n", n, sep="")] = sum(cov_ind_p) / replicates
   cov_prob[2,paste("n", n, sep="")] = sum(cov_ind_b) / replicates
   
+  emp_est[1,paste("n", n, sep="")] = mean(p_est)
+  emp_est[2,paste("n", n, sep="")] = sd(p_est)
+  emp_est[3,paste("n", n, sep="")] = mean(beta_est)
+  emp_est[4,paste("n", n, sep="")] = sd(beta_est)
+  
   
 }
 
+emp_est
 cov_prob
 
 ################################################################################

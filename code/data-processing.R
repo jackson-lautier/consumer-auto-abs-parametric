@@ -12,6 +12,24 @@
 #R version 4.3.2 (2023-10-31 ucrt) -- "Eye Holes"
 #RStudio 2023.03.0+386 "Cherry Blossom" Release
 #(3c53477afb13ab959aeb5b34df1f10c237b256c3, 2023-03-09) for Windows
+
+#cpu, R details
+# _                           
+# platform       aarch64-apple-darwin20      
+# arch           aarch64                     
+# os             darwin20                    
+# system         aarch64, darwin20           
+# status                                     
+# major          4                           
+# minor          3.2                         
+# year           2023                        
+# month          10                          
+# day            31                          
+# svn rev        85441                       
+# language       R                           
+# version.string R version 4.3.2 (2023-10-31)
+# nickname       Eye Holes    
+
 ######################################################################################
 ######################################################################################
 ######################################################################################
