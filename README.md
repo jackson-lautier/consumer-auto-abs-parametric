@@ -4,14 +4,12 @@
 
 ## Introduction
 
-This repository is intended as an online supplement to the manuscript,
-_Estimating the time-to-event distribution for
-loan-level data within a consumer auto loan asset-backed security_.
-Please attribute any citations of this repository to the original
-manuscript.  For reference, the current version of the manuscript may be
-found [here](https://img1.wsimg.com/blobby/go/e126e6bc-09bb-4685-8200-323fe6a91322/downloads/a7266967-1ce1-410d-acd3-d83b26b41db9/aoas-main-07182025.pdf?ver=1752781971609) with
-its supplement [here](https://img1.wsimg.com/blobby/go/e126e6bc-09bb-4685-8200-323fe6a91322/downloads/832237ae-9742-40d9-b60f-fb8a07effca2/aoas-supplement-07182025.pdf?ver=1752781971609).
+This repository is intended as an online supplement to the manuscript:
 
+Jackson P. Lautier. Vladimir Pozdnyakov. Jun Yan. "Estimating the time-to-event distribution for loan-level data within a consumer auto loan asset-backed security." Ann. Appl. Stat. 19 (4) 2831 - 2851, December 2025. [https://doi.org/10.1214/25-AOAS2103](https://doi.org/10.1214/25-AOAS2103)
+
+Please attribute any citations of this repository to the original
+manuscript.
 
 This repository includes:
 
